@@ -13,12 +13,10 @@ go get github.com/Xeoncross/httpfilecache
 ```
 
 ```
-dir, err := os.MkdirTemp("", "mycache")
-defer os.RemoveAll(dir)
-
+dir := "/whatever/you/want"
 client := NewClient(dir, time.Second*60)
-resp, err := client.Get("https://example.com/api/here?id=1234") // cached on first request
 
+resp, err := client.Get("https://example.com/api/here?id=1234") // cached on first request
 resp, err := client.Get("https://example.com/api/here?id=1234") // loaded from disk after that
 ```
 
