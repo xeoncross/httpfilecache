@@ -1,23 +1,26 @@
 ## HTTP File Cache (Go)
 
-A simple HTTP request file cache that stores results by path in 
-`$HOME/.cache` (or `$XDG_CACHE_HOME` if set). This is mostly for inspection 
-use-cases like integrations tests or prototyping where you want to be able to 
-easily browse a hierarchy of request bodies.
+A simple HTTP request file cache that stores the full HTTP request payload on 
+disk and returns it instead of making a request while the expires TTL is still
+valid. Developed as a transparent, simple way to cache remote payloads without 
+needing a database or caching logic.
+
+It is only suitable for use as a 'private' cache (i.e. for a web-browser or an 
+API-client and not for a shared proxy).
 
 ```
-http://www.sub1.example.com/cool/webpage.html 
-
-would be stored under:
-
-~./cache
-    /httpfilecache
-        /.com
-            /example.sub1.www
-                /cool-webpage.html
+go get github.com/Xeoncross/httpfilecache
 ```
 
-The cache is shared globally between all projects using this library.
+```
+dir, err := os.MkdirTemp("", "mycache")
+defer os.RemoveAll(dir)
 
-For production work loads consider https://github.com/gregjones/httpcache/ which
-also allows the caching of byte ranges.
+client := NewClient(dir, time.Second*60)
+resp, err := client.Get("https://example.com/api/here?id=1234") // cached on first request
+
+resp, err := client.Get("https://example.com/api/here?id=1234") // loaded from disk after that
+```
+
+Also consider https://github.com/gregjones/httpcache/ which supports a different
+feature set.
