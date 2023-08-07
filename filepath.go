@@ -28,7 +28,7 @@ func URLToFilepath(req *http.Request) string {
 // Sanitize path replacing multiple forbidden runes with a single "-"
 func Sanitize(s string) string {
 	var seen bool
-	return strings.Map(func(r rune) rune {
+	return strings.Trim(strings.Map(func(r rune) rune {
 		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '.' {
 			seen = false
 			return r
@@ -38,5 +38,5 @@ func Sanitize(s string) string {
 		}
 		seen = true
 		return '-'
-	}, s)
+	}, s), "-")
 }
