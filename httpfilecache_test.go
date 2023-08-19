@@ -31,7 +31,6 @@ func TestCache(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create test directory: %s", err)
 	}
-	t.Log(dir)
 	defer os.RemoveAll(dir)
 
 	client := NewClient(dir, time.Second*10)
@@ -97,11 +96,11 @@ func TestSanitize(t *testing.T) {
 		},
 		{
 			input:  "//",
-			output: "-",
+			output: "",
 		},
 		{
 			input:  "path?",
-			output: "path-",
+			output: "path",
 		},
 		{
 			input:  "file-path-here?query=here",
