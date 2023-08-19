@@ -11,6 +11,7 @@ import (
 
 type Response struct {
 	Response *http.Response
+	Filepath string
 	Error    error
 }
 
@@ -39,7 +40,7 @@ func ReplayCachedRequests(ctx context.Context, dir string) chan Response {
 				if err != nil {
 					return fmt.Errorf("%s: %w", path, err)
 				}
-				ch <- Response{Response: res}
+				ch <- Response{Response: res, Filepath: path}
 			}
 
 			return nil
